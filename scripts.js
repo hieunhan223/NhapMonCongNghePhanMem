@@ -13,10 +13,11 @@ recognition.continuous = true;
 let requestCount = 0;
 let isWaitingForResponse = false;
 let isRecording = false; // Biến trạng thái để biết có đang thu âm hay không
+let isSpeaking = false; // BIẾN MỚI: Theo dõi trạng thái máy tính đang nói
 
 mic.onclick = () => {
-  if (isRecording) {
-    console.log("🔊 Already recording...");
+  if (isRecording || isSpeaking) {
+    console.log("🔊 Already in operation...");
     return;
   }
   recognition.start();
@@ -30,8 +31,7 @@ endRecordingButton.onclick = () => {
     if (isRecording) {
         recognition.stop(); // Dừng quá trình nhận dạng
         mic.classList.remove("pulsing");
-        isRecording = false;
-        mic.style.backgroundColor = ''; // Đổi màu nút mic về trạng thái ban đầu
+        isRecording = false;        
         output.innerHTML = "<i>Đã kết thúc thu âm.</i>";
         console.log("Đã dừng thu âm.");
     }
@@ -42,6 +42,13 @@ recognition.onresult = async (event) => {
   const transcript = event.results[event.results.length - 1][0].transcript; // Lấy kết quả cuối cùng
   output.innerHTML = "<b>You said:</b> " + transcript;
 
+// Quan trọng: Dừng thu âm ngay sau khi có kết quả để máy tính có thể trả lời
+    if (isRecording) {
+        recognition.stop();
+        isRecording = false;
+        mic.classList.remove("pulsing");
+        console.log("Đã dừng thu âm để chờ Gemini trả lời.");
+    }  
 // Chỉ gửi yêu cầu Gemini nếu không đang chờ phản hồi từ yêu cầu trước đó
   if (isWaitingForResponse) {
       console.log("⏳ Đang chờ phản hồi trước đó. Yêu cầu Gemini bị chặn.");
@@ -78,6 +85,21 @@ recognition.onresult = async (event) => {
 
     const synth = window.speechSynthesis;
     const utter = new SpeechSynthesisUtterance(reply);
+// --- QUAN TRỌNG: Xử lý khi máy tính nói xong ---
+    utter.onend = (event) => {
+        console.log('✅ Máy tính đã phát âm xong.');
+        isSpeaking = false; // Đặt lại trạng thái không còn nói
+        // Chỉ khởi động lại microphone nếu chưa bấm nút kết thúc
+        if (!endRecordingButton.hasAttribute('data-stopped')) { // Kiểm tra biến trạng thái riêng cho nút end
+            console.log("Tự động khởi động lại thu âm sau khi Gemini nói xong.");
+            recognition.start(); // Bắt đầu lại thu âm
+            isRecording = true;
+            mic.classList.add("pulsing");
+            output.innerHTML += "<i><br>Đang nghe tiếp...</i>";
+        }
+    };
+    
+    isSpeaking = true; // Đặt trạng thái đang nói trước khi bắt đầu phát âm
     synth.speak(utter);
 
   } catch (error) {
@@ -95,6 +117,7 @@ recognition.onend = () => {
         // Nếu vẫn đang trong trạng thái ghi âm, tự động khởi động lại nhận dạng
         // Điều này giúp duy trì việc lắng nghe liên tục sau một khoảng dừng
         recognition.start();
+        mic.classList.add("pulsing");
         console.log("Tự động khởi động lại nhận dạng giọng nói.");
     }
 };
