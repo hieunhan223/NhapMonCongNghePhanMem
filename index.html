@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Gemini Voice App</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <title>Gemini Voice App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🎤 Learning English via Gemini</h1>
-  <div class="controls">
-    <div id="microphone">🎙️</div>
-    <div id="endRecording">🛑 Kết thúc</div> </div>
-  <div id="output"></div>
+    <h1>🎤 Learning English via Gemini</h1>
+    <div class="controls">
+        <div id="microphone">🎙️</div>
+        <div id="endRecording">🛑 Kết thúc</div>
+    </div>
+    <div id="output"></div>
 
-  <script type="module" src="scripts.js"></script>
+    <div class="conversation-history-container">
+        <h2>Lịch sử trò chuyện</h2>
+        <div id="chatbox">
+            </div>
+        <button id="clearHistory">Xóa lịch sử</button>
+    </div>
+
+    <script type="module" src="scripts.js"></script>
 </body>
 </html>

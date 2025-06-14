@@ -5,6 +5,15 @@ body {
   background-color: #f7f7f7;
 }
 
+#endRecording {
+  width: 100px;
+  height: 30px;
+  margin: 30px auto;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
 #microphone {
   width: 100px;
   height: 100px;
@@ -41,4 +50,127 @@ body {
 #output {
   margin-top: 20px;
   font-size: 18px;
+}
+
+/* --- CSS mới cho Chatbox --- */
+.conversation-history-container {
+    width: 80%;
+    max-width: 1500px;
+    text-align: left;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+}
+
+.conversation-history-container h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+#chatbox {
+    height: 350px; /* Chiều cao cố định cho chatbox */
+    overflow-y: auto; /* Thêm thanh cuộn dọc */
+    padding: 15px;
+    border: 1px solid #e0e0e0; /* Viền nhẹ cho khu vực chat */
+    border-radius: 8px;
+    background-color: #fcfcfc;
+    margin-bottom: 15px;
+    display: flex; /* Dùng flexbox để quản lý tin nhắn */
+    flex-direction: column; /* Tin nhắn xếp chồng lên nhau */
+    gap: 10px; /* Khoảng cách giữa các bong bóng tin nhắn */
+}
+
+/* Phong cách cho từng tin nhắn */
+.message {
+    display: flex;
+    margin-bottom: 8px; /* Khoảng cách giữa các tin nhắn */
+    align-items: flex-start; /* Căn trên cùng */
+}
+
+.message.user {
+    justify-content: flex-end; /* Tin nhắn của người dùng căn phải */
+}
+
+.message.gemini {
+    justify-content: flex-start; /* Tin nhắn của Gemini căn trái */
+}
+
+.message-bubble {
+    max-width: 75%; /* Giới hạn chiều rộng bong bóng tin nhắn */
+    padding: 12px 18px;
+    border-radius: 20px; /* Bo tròn các góc */
+    font-size: 0.95em;
+    line-height: 1.5;
+    word-wrap: break-word; /* Đảm bảo từ dài tự động xuống dòng */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message.user .message-bubble {
+    background-color: #007bff; /* Màu nền cho tin nhắn người dùng */
+    color: white;
+    border-bottom-right-radius: 5px; /* Góc dưới bên phải ít tròn hơn để tạo hiệu ứng chat */
+}
+
+.message.gemini .message-bubble {
+    background-color: #e6e6e6; /* Màu nền cho tin nhắn Gemini */
+    color: #333;
+    border-bottom-left-radius: 5px; /* Góc dưới bên trái ít tròn hơn */
+}
+
+.message-sender {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 0.85em; /* Kích thước nhỏ hơn cho tên người gửi */
+    color: #666;
+    display: none; /* Ẩn tên người gửi nếu muốn chỉ dùng màu bong bóng */
+}
+
+.message.user .message-sender {
+    text-align: right; /* Căn phải tên người gửi của user */
+    color: #0056b3;
+}
+
+.message.gemini .message-sender {
+    text-align: left; /* Căn trái tên người gửi của Gemini */
+    color: #2c3e50;
+}
+
+/* Timestamp bên trong bong bóng hoặc dưới bong bóng */
+.message-timestamp {
+    font-size: 0.75em;
+    color: rgba(0, 0, 0, 0.5); /* Màu mờ */
+    margin-top: 5px;
+    display: block;
+    text-align: right; /* Timestamp của user */
+}
+
+.message.gemini .message-timestamp {
+    text-align: left; /* Timestamp của gemini */
+}
+
+
+#clearHistory {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+#clearHistory:hover {
+    background-color: #5a6268;
+}
+
+/* Thêm kiểu cho nút bị disabled */
+#clearHistory:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
 }
